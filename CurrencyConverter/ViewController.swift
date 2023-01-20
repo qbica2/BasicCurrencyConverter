@@ -26,7 +26,18 @@ class ViewController: UIViewController {
         fromLabel.layer.masksToBounds = true
         toLabel.layer.masksToBounds = true
         resultLabel.layer.masksToBounds = true
+        
+        fromLabel.isUserInteractionEnabled = true
+        toLabel.isUserInteractionEnabled = true
+        let fromLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(getAllCurriencies))
+        let toLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(getAllCurriencies))
+        fromLabel.addGestureRecognizer(fromLabelGestureRecognizer)
+        toLabel.addGestureRecognizer(toLabelGestureRecognizer)
 
+    }
+    
+    @objc func getAllCurriencies(){
+        performSegue(withIdentifier: "toPicker", sender: nil)
     }
 
     
