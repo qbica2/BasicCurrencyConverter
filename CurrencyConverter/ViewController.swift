@@ -22,9 +22,14 @@ class ViewController: UIViewController {
     
     var symbolsDictionary = [String : String]()
     
+    var shortCurrencies = [String]()
+    var longCurrencies = [String]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        getAllCurriencies()
         
         fromLabel.layer.cornerRadius = 8
         toLabel.layer.cornerRadius = 8
@@ -35,14 +40,24 @@ class ViewController: UIViewController {
         
         fromLabel.isUserInteractionEnabled = true
         toLabel.isUserInteractionEnabled = true
-        let fromLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(getAllCurriencies))
-        let toLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(getAllCurriencies))
+        let fromLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
+        let toLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvertTo))
         fromLabel.addGestureRecognizer(fromLabelGestureRecognizer)
         toLabel.addGestureRecognizer(toLabelGestureRecognizer)
 
     }
     
-    @objc func getAllCurriencies(){
+    @objc func selectCurrencyToConvert(){
+            
+        performSegue(withIdentifier: "toPicker", sender: nil)
+    }
+    
+    @objc func selectCurrencyToConvertTo(){
+            
+        performSegue(withIdentifier: "toPicker", sender: nil)
+    }
+    
+    func getAllCurriencies(){
         
         let url = baseURL  + "symbols"
         var request = URLRequest(url: URL(string: url)!)
@@ -64,8 +79,11 @@ class ViewController: UIViewController {
                         DispatchQueue.main.async {
                             if let symbols = jsonRespone["symbols"] as? [String: String] {
                                 
+                                self.symbolsDictionary = symbols
+                                
                                 for symbol in symbols {
-                                    self.symbolsDictionary[symbol.key] = symbol.value
+                                    self.shortCurrencies.append(symbol.key)
+                                    self.longCurrencies.append(symbol.value)
                                 }
                                 
                             }
@@ -85,7 +103,15 @@ class ViewController: UIViewController {
         
         task.resume()
         
-        performSegue(withIdentifier: "toPicker", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toPicker" {
+            let destinationVC = segue.destination as! PickerTableTableViewController
+            destinationVC.list = symbolsDictionary
+            destinationVC.shortCurrenciesList = shortCurrencies.sorted()
+            destinationVC.longCurrenciesList = longCurrencies.sorted()
+        }
     }
 
     
