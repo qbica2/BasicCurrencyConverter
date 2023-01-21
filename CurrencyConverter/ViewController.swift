@@ -17,6 +17,7 @@ class ViewController: UIViewController, DataTransfer {
     @IBOutlet weak var currencyToLabel: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     let apiKey = "xe12H923CCbIewa2hafRg1DJNlMnJ3A9"
     let baseURL = "https://api.apilayer.com/exchangerates_data/"
@@ -156,8 +157,11 @@ class ViewController: UIViewController, DataTransfer {
     @IBAction func didTappedConvertButton(_ sender: Any) {
         if amountTextField.text == "" {
             showAlert(alertTitle: "Warning", alertMessage: "Amount field cannot be empty", firstButtonTitle: "OK")
+        } else {
+            activityIndicator.startAnimating()
+            convert()
         }
-        convert()
+
     }
     
     private func convert(){
@@ -179,6 +183,7 @@ class ViewController: UIViewController, DataTransfer {
                         DispatchQueue.main.async {
                             
                             if let result = jsonResponse["result"] as? Double {
+                                self.activityIndicator.stopAnimating()
                                 self.resultLabel.text = "  \(result) \(self.selectedSecondCurrency)"
                             }
                             
