@@ -9,9 +9,6 @@ import UIKit
 
 class ViewController: UIViewController, DataTransfer {
 
-    
-    
-    
     @IBOutlet weak var topLabel: UILabel!
     @IBOutlet weak var bottomLabel: UILabel!
     @IBOutlet weak var fromLabel: UILabel!
@@ -29,13 +26,14 @@ class ViewController: UIViewController, DataTransfer {
     var isFirstCurrency = Bool()
     var selectedFirstCurrency = ""
     var selectedSecondCurrency = ""
+    var amount = 0
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         getAllCurriencies()
-        
+                
         fromLabel.layer.cornerRadius = 8
         toLabel.layer.cornerRadius = 8
         resultLabel.layer.cornerRadius = 8
@@ -134,6 +132,43 @@ class ViewController: UIViewController, DataTransfer {
     
     
     @IBAction func didTappedConvertButton(_ sender: Any) {
+        convert()
+    }
+    
+    func convert(){
+        let url = baseURL  + "convert?&from=\(selectedFirstCurrency)&to=\(selectedSecondCurrency)&amount=\(amountTextField.text ?? "0")"
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "GET"
+        request.addValue(apiKey, forHTTPHeaderField: "apiKey")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+//                alert göster
+                print("error")
+            } else {
+                if data != nil {
+                    do {
+                        
+                        let jsonResponse = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers ) as! Dictionary<String, Any>
+                        print(jsonResponse)
+                        DispatchQueue.main.async {
+                            
+                            if let result = jsonResponse["result"] as? Double {
+                                self.resultLabel.text = "  \(result) \(self.selectedSecondCurrency)"
+                            }
+                            
+                        }
+                        
+                        
+                    } catch {
+                        print("error")
+                    }
+                }
+                
+            }
+        }
+        task.resume()
+        
     }
     
 }
