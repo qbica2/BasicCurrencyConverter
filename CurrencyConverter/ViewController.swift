@@ -7,7 +7,9 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, DataTransfer {
+
+    
     
     
     @IBOutlet weak var topLabel: UILabel!
@@ -24,6 +26,9 @@ class ViewController: UIViewController {
     
     var shortCurrencies = [String]()
     var longCurrencies = [String]()
+    var isFirstCurrency = Bool()
+    var selectedFirstCurrency = ""
+    var selectedSecondCurrency = ""
     
     
     override func viewDidLoad() {
@@ -47,13 +52,25 @@ class ViewController: UIViewController {
 
     }
     
+    func passDataBack(data: String) {
+        
+        if isFirstCurrency {
+            selectedFirstCurrency = data
+            fromLabel.text = "  From: \(data)"
+        } else {
+            selectedSecondCurrency = data
+            toLabel.text = "  To: \(data)"
+        }
+
+    }
+    
     @objc func selectCurrencyToConvert(){
-            
+        isFirstCurrency = true
         performSegue(withIdentifier: "toPicker", sender: nil)
     }
     
     @objc func selectCurrencyToConvertTo(){
-            
+        isFirstCurrency = false
         performSegue(withIdentifier: "toPicker", sender: nil)
     }
     
@@ -78,13 +95,12 @@ class ViewController: UIViewController {
                         
                         DispatchQueue.main.async {
                             if let symbols = jsonRespone["symbols"] as? [String: String] {
+                            
+                                let sorted = symbols.sorted { $0.key < $1.key }
                                 
+                                self.shortCurrencies = Array(sorted.map({ $0.key }))
+                                self.longCurrencies = Array(sorted.map({ $0.value }))
                                 self.symbolsDictionary = symbols
-                                
-                                for symbol in symbols {
-                                    self.shortCurrencies.append(symbol.key)
-                                    self.longCurrencies.append(symbol.value)
-                                }
                                 
                             }
 
@@ -109,8 +125,9 @@ class ViewController: UIViewController {
         if segue.identifier == "toPicker" {
             let destinationVC = segue.destination as! PickerTableTableViewController
             destinationVC.list = symbolsDictionary
-            destinationVC.shortCurrenciesList = shortCurrencies.sorted()
-            destinationVC.longCurrenciesList = longCurrencies.sorted()
+            destinationVC.shortCurrenciesList = shortCurrencies
+            destinationVC.longCurrenciesList = longCurrencies
+            destinationVC.delegate = self
         }
     }
 

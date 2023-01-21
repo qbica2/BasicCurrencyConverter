@@ -14,6 +14,9 @@ class PickerTableTableViewController: UITableViewController {
     var shortCurrenciesList = [String]()
     var longCurrenciesList = [String]()
     
+    var chosenCurrency = ""
+    
+    var delegate: DataTransfer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +46,16 @@ class PickerTableTableViewController: UITableViewController {
                  
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        chosenCurrency = shortCurrenciesList[indexPath.row]
+        delegate?.passDataBack(data: chosenCurrency)
+        navigationController?.popViewController(animated: true)
+    }
 
    
+}
+
+protocol DataTransfer {
+    func passDataBack( data: String )
 }
