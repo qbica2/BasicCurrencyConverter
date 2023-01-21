@@ -13,6 +13,8 @@ class ViewController: UIViewController, DataTransfer {
     @IBOutlet weak var bottomLabel: UILabel!
     @IBOutlet weak var fromLabel: UILabel!
     @IBOutlet weak var toLabel: UILabel!
+    @IBOutlet weak var currencyFromLabel: UILabel!
+    @IBOutlet weak var currencyToLabel: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var resultLabel: UILabel!
     
@@ -24,9 +26,9 @@ class ViewController: UIViewController, DataTransfer {
     var shortCurrencies = [String]()
     var longCurrencies = [String]()
     var isFirstCurrency = Bool()
-    var selectedFirstCurrency = ""
-    var selectedSecondCurrency = ""
-    var amount = 0
+    var selectedFirstCurrency = "USD"
+    var selectedSecondCurrency = "TRY"
+    var amount = 0.0
     
     
     override func viewDidLoad() {
@@ -34,30 +36,43 @@ class ViewController: UIViewController, DataTransfer {
         
         getAllCurriencies()
                 
-        fromLabel.layer.cornerRadius = 8
-        toLabel.layer.cornerRadius = 8
+        fromLabel.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        currencyFromLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        toLabel.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        currencyToLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        
+        for x  in [ fromLabel, currencyFromLabel, toLabel, currencyToLabel] {
+            x!.layer.cornerRadius = 8
+            x!.layer.masksToBounds = true
+            x!.isUserInteractionEnabled = true
+        }
+
         resultLabel.layer.cornerRadius = 8
-        fromLabel.layer.masksToBounds = true
-        toLabel.layer.masksToBounds = true
         resultLabel.layer.masksToBounds = true
         
-        fromLabel.isUserInteractionEnabled = true
-        toLabel.isUserInteractionEnabled = true
         let fromLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
+        let currencyFromLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
         let toLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvertTo))
-        fromLabel.addGestureRecognizer(fromLabelGestureRecognizer)
-        toLabel.addGestureRecognizer(toLabelGestureRecognizer)
+        let currencyToLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
 
+        
+        fromLabel.addGestureRecognizer(fromLabelGestureRecognizer)
+        currencyFromLabel.addGestureRecognizer(currencyFromLabelGestureRecognizer)
+        toLabel.addGestureRecognizer(toLabelGestureRecognizer)
+        currencyToLabel.addGestureRecognizer(currencyToLabelGestureRecognizer)
+        
+        resultLabel.text = "  \(amount) \(selectedSecondCurrency)"
     }
+    
     
     func passDataBack(data: String) {
         
         if isFirstCurrency {
             selectedFirstCurrency = data
-            fromLabel.text = "  From: \(data)"
+            currencyFromLabel.text = selectedFirstCurrency
         } else {
             selectedSecondCurrency = data
-            toLabel.text = "  To: \(data)"
+            currencyToLabel.text = selectedSecondCurrency
         }
 
     }
