@@ -50,18 +50,25 @@ class ViewController: UIViewController, DataTransfer {
         resultLabel.layer.cornerRadius = 8
         resultLabel.layer.masksToBounds = true
         
-        let fromLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
-        let currencyFromLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
-        let toLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvertTo))
-        let currencyToLabelGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
+        let fromLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
+        let currencyFromLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
+        let toLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvertTo))
+        let currencyToLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
+        
+        let gestureRecognize = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(gestureRecognize)
 
         
-        fromLabel.addGestureRecognizer(fromLabelGestureRecognizer)
-        currencyFromLabel.addGestureRecognizer(currencyFromLabelGestureRecognizer)
-        toLabel.addGestureRecognizer(toLabelGestureRecognizer)
-        currencyToLabel.addGestureRecognizer(currencyToLabelGestureRecognizer)
+        fromLabel.addGestureRecognizer(fromLabelTapGestureRecognizer)
+        currencyFromLabel.addGestureRecognizer(currencyFromLabelTapGestureRecognizer)
+        toLabel.addGestureRecognizer(toLabelTapGestureRecognizer)
+        currencyToLabel.addGestureRecognizer(currencyToLabelTapGestureRecognizer)
         
         resultLabel.text = "  \(amount) \(selectedSecondCurrency)"
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     
