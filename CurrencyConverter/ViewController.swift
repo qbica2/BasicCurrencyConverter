@@ -53,7 +53,7 @@ class ViewController: UIViewController, DataTransfer {
         let fromLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
         let currencyFromLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
         let toLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvertTo))
-        let currencyToLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvert))
+        let currencyToLabelTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCurrencyToConvertTo))
         
         let gestureRecognize = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(gestureRecognize)
@@ -94,7 +94,7 @@ class ViewController: UIViewController, DataTransfer {
         performSegue(withIdentifier: "toPicker", sender: nil)
     }
     
-    func getAllCurriencies(){
+    private func getAllCurriencies(){
         
         let url = baseURL  + "symbols"
         var request = URLRequest(url: URL(string: url)!)
@@ -154,10 +154,13 @@ class ViewController: UIViewController, DataTransfer {
     
     
     @IBAction func didTappedConvertButton(_ sender: Any) {
+        if amountTextField.text == "" {
+            showAlert(alertTitle: "Warning", alertMessage: "Amount field cannot be empty", firstButtonTitle: "OK")
+        }
         convert()
     }
     
-    func convert(){
+    private func convert(){
         let url = baseURL  + "convert?&from=\(selectedFirstCurrency)&to=\(selectedSecondCurrency)&amount=\(amountTextField.text ?? "0")"
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
@@ -191,6 +194,17 @@ class ViewController: UIViewController, DataTransfer {
         }
         task.resume()
         
+    }
+    
+    private func showAlert(alertTitle: String,
+                           alertMessage: String,
+                           preferredStyle: UIAlertController.Style = .alert,
+                           firstButtonTitle: String,
+                           buttonHandler: ((UIAlertAction)-> Void)? = nil ) {
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: preferredStyle)
+        let firstButton = UIAlertAction(title: firstButtonTitle, style: .default)
+        alert.addAction(firstButton)
+        present(alert, animated: true)
     }
     
 }
