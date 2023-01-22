@@ -2,13 +2,15 @@
 
 ## Screenshots
 
-![landing](landing.png)
+<!--![landing](landing.png)-->
+<!---->
+<!--![list](list.png)-->
+<!---->
+<!--![activity](activity.png)-->
 
-![list](list.png)
-
-![activity](activity.png)
-
-  <img width=200 src=assets/landing.png> | <img width=200 src=assets/list.png> | <img width=200 src=assets/activity.png>
+<img src="landing.png" alt="landing" width="300" />
+<img src="list.png" alt="list" width="300" />
+<img src="activity.png" alt="activity" width="300" />
 
   ## Contact
 
