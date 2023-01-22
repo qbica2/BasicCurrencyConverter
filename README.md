@@ -2,11 +2,13 @@
 
 ## Screenshots
 
-![landing](/Users/kubilayakdemir/Desktop/project/CurrencyConverter/landing.png)
+![landing](landing.png)
 
-![list](/Users/kubilayakdemir/Desktop/project/CurrencyConverter/list.png)
+![list](list.png)
 
-![activity](/Users/kubilayakdemir/Desktop/project/CurrencyConverter/activity.png)
+![activity](activity.png)
+
+  <img width=200 src=assets/landing.png> | <img width=200 src=assets/list.png> | <img width=200 src=assets/activity.png>
 
   ## Contact
 
