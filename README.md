@@ -1,2 +1,4 @@
 # BasicCurrencyConverter
-basic currency converter 
+
+
+![landing](/Users/kubilayakdemir/Desktop/landing.png)
